@@ -1,4 +1,5 @@
 #!/usr/bin/python
+#decrypt the transopotion cipher
 
 import pdb, math
 
@@ -8,15 +9,15 @@ def main():
     key = fetchkey()
     #kryption = fuctionality()
     in_length = len(nb) #defines the length of the string/message
-    if (fuctionality()):
+    if (fuctionality()): #returns true for encryption and false for decryption
         print((method(key,nb, in_length)))
     else:
         print((method_dec(key,nb,in_length)))
 
 def method_dec(key, message, messagelength):
     
-    columns = math.ceil((messagelength/(float(key))))
-    nb_array = ['']*int(columns)
+    columns = math.ceil((messagelength/(float(key)))) # works out the number of columsn needed
+    nb_array = ['']*int(columns) #and therefore how big the array needs to be
     rows = key
     shadowboxes = (columns*rows) - messagelength # gives the number of blank boxes
     col =0

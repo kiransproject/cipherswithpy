@@ -1,8 +1,9 @@
 import enchant, E_11
+#detecting english
 
 def main():
     fileContents = readfilesplit("dictionary.txt")
-    print '{0:.0f}%'.format(float(lookup(fileContents))/float(len(fileContents))*100)
+    print '{0:.0f}%'.format(float(lookup(fileContents))/float(len(fileContents))*100) #prints the percentage of words in the file that are english words
     
 
 def readfilesplit(filename):

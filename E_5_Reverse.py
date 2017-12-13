@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+# reverse cipher
+
 message = raw_input('Text to encrypt or decrypt : ')
 translated = ''
 i = len(message)-1

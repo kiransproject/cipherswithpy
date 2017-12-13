@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+#program to test our decription program and encryption
 import pdb, math, os, random, sys
 
 def main():
@@ -8,7 +8,7 @@ def main():
     message_rand(int(numbera))
 
 
-def message_rand(attempts):
+def message_rand(attempts): #generate a random message and then encrypt and decrypt, ensuring its the same 
     for i in range(attempts):
         message = os.urandom(random.randint(10, 50))
         for key in range(1, len(message)):

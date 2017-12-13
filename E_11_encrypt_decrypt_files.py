@@ -1,16 +1,18 @@
 #!/usr/bin/python
 
-import time, os, sys, E_10
+#encrypting and decrypting files
+
+import time, os, sys, E_10_test_transposition_cipher.test_transposition_cipher
 
 def main():
     name = (getFileName())
     fileName =name+str('.txt')
     outputfileName = name+str('_output.txt')
-    key = (E_10.fetchkey())
-    if (E_10.fuctionality()):
-        writefile(outputfileName, (E_10.method_enc(key, (readfile(fileName)))))
+    key = (E_10_test_transposition_cipher.fetchkey())
+    if (E_10_test_transposition_cipher.fuctionality()): #functionality defines true for encryption and false for decryption
+        writefile(outputfileName, (E_10_test_transposition_cipher.method_enc(key, (readfile(fileName)))))
     else:
-        writefile(outputfileName, (E_10.method_dec(key, (readfile(fileName)))))
+        writefile(outputfileName, (E_10_test_transposition_cipher.method_dec(key, (readfile(fileName)))))
 
 
 def getFileName():

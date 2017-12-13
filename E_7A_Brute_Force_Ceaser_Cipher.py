@@ -1,4 +1,5 @@
 #!/usr/bin/python
+#brute force ceaser cipher
 
 nb = raw_input('Text to encrypt or decrypt : ')
 chars= list(nb)

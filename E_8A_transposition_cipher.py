@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
-import pdb
+#function to encrypt using the transophotion cipher
+import pdb #for breakpoints
 
 nb = raw_input('Text to encrypt or decrypt : ')
 chars= list(nb)
