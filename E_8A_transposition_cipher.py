@@ -6,7 +6,7 @@ import pdb #for breakpoints
 nb = raw_input('Text to encrypt or decrypt : ')
 chars= list(nb)
 key = int(raw_input('enter key length : '))
-kryption = raw_input('Enter E for Encryption or D for Decryption : ')
+#kryption = raw_input('Enter E for Encryption or D for Decryption : ')
 
 in_length = len(nb)
 

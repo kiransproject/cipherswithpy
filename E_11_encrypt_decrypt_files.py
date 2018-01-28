@@ -2,7 +2,7 @@
 
 #encrypting and decrypting files
 
-import time, os, sys, E_10_test_transposition_cipher.test_transposition_cipher
+import time, os, sys, E_10_test_transposition_cipher
 
 def main():
     name = (getFileName())
