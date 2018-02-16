@@ -9,9 +9,11 @@ def main():
     key =E_9A_decrypt_transposition_cipher.fetchkey()
     mode =E_9A_decrypt_transposition_cipher.fuctionality() 
     if (mode):
-        print(encrypt(nb, key, mode))
-  #  else:
-   #     newmes = decrypt(nb, key, mode)
+        mes = encrypt(nb, key, mode)
+        print ("encrypted text is: %s" % mes)
+        print("decrypted text is: %s" % decrypt(mes,key, False))
+    else:
+        print("decrypted text is: %s " % decrypt(nb, key, mode))
 
 
 def getKeySections(kys):
@@ -36,6 +38,16 @@ def checkKeys(key1, key2, mode):
         sys.exit(' Key A and B must be greater than 0 and key B must be less than %s ' % (ascii_length-1))
     if (cryptomath.gcd(key1, ascii_length) != 1):
         sys.exit(' Key A and the symbol set size %s are not relatively prime ' % ascii_length)
+
+def decrypt(message, kys, mode):
+    KeyA, KeyB = getKeySections(kys)
+    checkKeys(KeyA, KeyB, mode)
+    inveseA = cryptomath.findModInverse(KeyA, ascii_length) #finds the inverse of the key A
+    plaintext = ''
+    for symbol in message:
+        plaintext += chr(((ord(symbol) -KeyB) *inveseA) % ascii_length)
+    return plaintext
+    
 
 if __name__ == '__main__':
     main()
