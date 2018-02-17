@@ -23,9 +23,13 @@ def splitmessage(message):
 
 def isEnglish(messa):
     message = splitmessage(messa)
-    if ((float(lookup(message)/float(len(message))*100)) > 80):
-        return True
-    else:
+    try :
+        if ((float(lookup(message)/float(len(message))*100)) > 80):
+            return True
+        else:
+            return False
+    except:
+        print("An error occured parsing the word")
         return False
 
 def lookup(posswords):
