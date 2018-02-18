@@ -26,14 +26,14 @@ def translate(mes, key, mode):
     translated = ''
     if mode == 'E':
         for symbol in mes:
-            symindex = ord(symbol)
-            translated += chr(key[symindex])
+            symindex = ord(symbol) #take ascii value of symbol
+            translated += chr(key[symindex]) #pick the value at symbol index in the key
         return translated
     elif mode == 'D':
         for symbol in mes:
-            symindex = ord(symbol)
-            keyindex = key.index(symindex)
-            translated += chr(keyindex)
+            symindex = ord(symbol) 
+            keyindex = key.index(symindex) #for decrypt find the index in the key that the symbol is from
+            translated += chr(keyindex) #map back
         return translated
 
 
