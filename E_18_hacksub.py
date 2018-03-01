@@ -8,36 +8,44 @@ if not os.path.exists('wordPatterns.py'):
         makeWordPatterns.main() # create the wordPatterns.py file
 
 def main():
-    message = E_17_sub_cipher.encrypt_message('here is a lot of words that hopefully are within the file that has been provided to me in the form of a dictionary HELLO ITS ME KIRAN ONE TWO THREE FOUR FIVE SIX SEVEN EIGHT NINE TEN ELEVENT TWELVE THIRTEEN FOURTEEN FIFTEEN ONCE I CAUGHT A FISH             ALIVE SIX SEVEN EIGHT NINE TEN THEN WE LET HIM GO AGAIN WHY DID YOU LET HIM GO BECAUSE HE BIT MY FINGER SO WHICH LITTLE FINGER DID HE BITE THIS LITTLE FINGER ON MY RIGHT                                                                                                                                                                                                                                                         ', E_17_sub_cipher.gen_key())
-    mostfreq = (collections.Counter(message).most_common(1)[0][0]) # find the most frequent symbol, we are going to assume this is a space
-    mes_with_spaces = message.replace(mostfreq, ' ')
-
-    
+    k = E_17_sub_cipher.gen_key()
+    message = E_17_sub_cipher.encrypt_message("here is a lot of words that hopefully are within the file that has been provided to me in the form of a dictionary HELLO ITS ME KIRAN ONE TWO THREE FOUR FIVE SIX SEVEN EIGHT NINE TEN ELEVENT TWELVE THIRTEEN FOURTEEN FIFTEEN ONCE I CAUGHT A FISH             ALIVE SIX SEVEN EIGHT NINE TEN THEN WE LET HIM GO AGAIN WHY DID YOU LET HIM GO BECAUSE HE BIT MY FINGER SO WHICH LITTLE FINGER DID HE BITE THIS LITTLE FINGER ON MY RIGHT                                                                                                                                                                                                                                                         ", k)
+    mostFreq = (collections.Counter(message).most_common(1)[0][0]) # find the most frequent symbol, we are going to assume this is a space
     print'Hacking......'
-    mapping= hacksub(mes_with_spaces)
+    mapping= hacksub(message, mostFreq)
+    mapping[ord(" ")].append(mostFreq)
+    
     print message
     print " "
     pprint.pprint(mapping)
     print " "
-    print decodemessage(mapping, mes_with_spaces)
+    print decodemessage(mapping, message, mostFreq)
 
-def decodemessage(mapping, mes):
-    key  = ['x'] * length
-    replace = chr(128)
-    for letter in range (length):
-        #letter = chr(letter)
-        if (len(mapping[letter]) == 1):
-            keyIndex = ord(mapping[letter][0]) # if one letter add it to the key
-            key[keyIndex] = letter
-    '''
-        else:
-            mes = mes.replace(letter, replace)
-    
-    pprint.pprint(key)
+def decodemessage(mapping, mes, mostFreq):
+    translated = ''
+    key  = [ord(mostFreq)] * length
+    for num in range (length):
+        if (len(mapping[num]) == 1):
+            letter = ord(mapping[num][0]) # if one letter add it to the key
+            key[letter] = num
+        
+        else: # else replace that letter in the message with a space
+            mes = mes.replace(chr(num), mostFreq)
+    ''' 
+    print(set(key))
+    print(mes)
     pdb.set_trace()
     '''
-    return E_17_sub_cipher.decrypt_message(mes, key)
 
+    for symbol in mes:
+        symindex = ord(symbol)
+        try:
+            keyindex = key.index(symindex) #for decrypt find the index in the key that the symbol is from
+            translated += chr(keyindex) #map back
+        except:
+            translated += " "
+    
+    return translated 
 
 def getCanditatemap():
     #return (dict.fromkeys(chr(i) for i in range(length))) # returns a dictionary with None as the value https://stackoverflow.com/questions/45465125/initialize-an-empty-dictionary-and-print-to-txt
@@ -46,9 +54,9 @@ def getCanditatemap():
         dict1[i] = []
     return dict1
 
-def hacksub(mess):
+def hacksub(mess, MFreq):
     matchedMap = getCanditatemap() # creates a blank map
-    cipherwordlist = mess.split() # split the message into a list
+    cipherwordlist = mess.split(MFreq) # split the message into a list
     for cipherword in cipherwordlist:
         wordpatt = E_18_makeWordpatt.getWordPattern(cipherword) # get the word pattern for the cipher word
         letmap = getCanditatemap()

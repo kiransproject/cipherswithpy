@@ -31,7 +31,7 @@ def translate(mes, key, mode):
             translated += chr(key[symindex]) #pick the value at symbol index in the key
         return translated
     elif mode == 'D':
-#        replace = chr(129)
+        print(mes)
         for symbol in mes:
             symindex = ord(symbol) 
             '''
@@ -39,13 +39,15 @@ def translate(mes, key, mode):
             print symindex
             print key[symindex]
             pdb.set_trace()
+            pprint.pprint(key)
+            pprint.pprint(mes)
+            pdb.set_trace()
             '''
-#            pprint.pprint(key)
-            try:
-                keyindex = key.index(symindex) #for decrypt find the index in the key that the symbol is from
-                translated += chr(keyindex) #map back
-            except:
-                pass
+#            try:
+            keyindex = key.index(symindex) #for decrypt find the index in the key that the symbol is from
+            translated += chr(keyindex) #map back
+#            except:
+#                pass
         return translated
 
 

@@ -8,19 +8,20 @@ import pprint, E_12_English_detect
 def getWordPattern(word):
     # Returns a string of the pattern form of the given word.
     # e.g. '0.1.2.3.4.1.2.3.5.6' for 'DUSTBUSTER'
-    
+    '''
     if (isinstance(word, basestring)):#checks if the word is a string and if so converts to upper case
            word = word.upper() # need to user upper as the dictionary we are using is all upper case, can remove if not needed
-
+    '''
     nextNum = 0
     letterNums = {}
     wordPattern = []
 
     for letter in word:
-        if letter not in letterNums:
-            letterNums[letter] = str(nextNum)
+        ascii_val = ord(letter)
+        if ascii_val not in letterNums:
+            letterNums[ascii_val] = str(nextNum)
             nextNum += 1
-        wordPattern.append(letterNums[letter])
+        wordPattern.append(letterNums[ascii_val])
     return '.'.join(wordPattern)
 
 
