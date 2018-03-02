@@ -1,4 +1,4 @@
-import os, E_17_sub_cipher, E_18_makeWordpatt, wordPatterns, copy, pprint, collections, pdb
+import os, E_17_sub_cipher, E_18_makeWordpatt, wordPatterns, copy, pprint, collections, pdb, E_9A_decrypt_transposition_cipher
 
 # the message gets decrypted without any spaces included and doesnt map well, as it takes the full ascii set so too many variables, also cant map something to show it cant be decrypted , as replace wont work without a valid char, in text output you should be able to see bits of teen and what not, could add a function that records the spaces so where it was split and reinserts them
 
@@ -9,7 +9,9 @@ if not os.path.exists('wordPatterns.py'):
 
 def main():
     k = E_17_sub_cipher.gen_key()
-    message = E_17_sub_cipher.encrypt_message("here is a lot of words that hopefully are within the file that has been provided to me in the form of a dictionary HELLO ITS ME KIRAN ONE TWO THREE FOUR FIVE SIX SEVEN EIGHT NINE TEN ELEVENT TWELVE THIRTEEN FOURTEEN FIFTEEN ONCE I CAUGHT A FISH             ALIVE SIX SEVEN EIGHT NINE TEN THEN WE LET HIM GO AGAIN WHY DID YOU LET HIM GO BECAUSE HE BIT MY FINGER SO WHICH LITTLE FINGER DID HE BITE THIS LITTLE FINGER ON MY RIGHT                                                                                                                                                                                                                                                         ", k)
+    #message = E_17_sub_cipher.encrypt_message("here is a lot of words that hopefully are within the file that has been provided to me in the form of a dictionary HELLO ITS ME KIRAN ONE TWO THREE FOUR FIVE SIX SEVEN EIGHT NINE TEN ELEVENT TWELVE THIRTEEN FOURTEEN FIFTEEN ONCE I CAUGHT A FISH             ALIVE SIX SEVEN EIGHT NINE TEN THEN WE LET HIM GO AGAIN WHY DID YOU LET HIM GO BECAUSE HE BIT MY FINGER SO WHICH LITTLE FINGER DID HE BITE THIS LITTLE FINGER ON MY RIGHT                                                                                                                                                                                                                                                         ", k)
+    message = E_9A_decrypt_transposition_cipher.fetchmessage()
+
     mostFreq = (collections.Counter(message).most_common(1)[0][0]) # find the most frequent symbol, we are going to assume this is a space
     print'Hacking......'
     mapping= hacksub(message, mostFreq)
@@ -43,7 +45,7 @@ def decodemessage(mapping, mes, mostFreq):
             keyindex = key.index(symindex) #for decrypt find the index in the key that the symbol is from
             translated += chr(keyindex) #map back
         except:
-            translated += " "
+            translated += chr(key.index(ord(mostFreq)))
     
     return translated 
 
@@ -55,6 +57,7 @@ def getCanditatemap():
     return dict1
 
 def hacksub(mess, MFreq):
+
     matchedMap = getCanditatemap() # creates a blank map
     cipherwordlist = mess.split(MFreq) # split the message into a list
     for cipherword in cipherwordlist:
@@ -64,7 +67,7 @@ def hacksub(mess, MFreq):
         if wordpatt not in wordPatterns.allPatterns:
             continue # Word is not in our dictioniary so continue onto the next word
 
-        for canditate in wordPatterns.allPatterns[wordpatt]: # cycles through the canditates that match the word pattern
+        for canditate in wordPatterns.allPatterns[wordpatt]: # cycles through the canditates that match the word pattern, only returns capital letters though but shouldnt make any difference 
             letmap = addLetttoMap(letmap, cipherword, canditate) # adds each candidates letters to the mapping so that we can analyse the pattern
  #           print letmap
         '''
