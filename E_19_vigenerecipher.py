@@ -1,5 +1,7 @@
 import E_9A_decrypt_transposition_cipher
 
+#implementation of the vigenere cipher 
+
 def main():
     message = E_9A_decrypt_transposition_cipher.fetchmessage()
     key = get_word_key()
@@ -12,7 +14,7 @@ def main():
         print("Decrypted message is : %s " % decrypt_mes(message, key))
 
 def get_word_key():
-    return ((raw_input('enter key : ')))
+    return (str(raw_input('enter key : ')))
 
 def encrypt_mes(mes, ke):
     return translateMessage(mes, ke, 'E')
@@ -31,13 +33,13 @@ def translateMessage(message, key, mode):
             new_sym = h-ord(key[key_in])
     
         if ((new_sym < 0) or (new_sym > 255)):
-            new_sym %= 255
+            new_sym %= 255 # takes care of the wrap around cases where the number is outside of the ascii value range
 
         translated.append(chr(new_sym))
         
         key_in +=1
-        if (key_in == len(key)):
-            key_in =0
+        if (key_in == len(key)): #need to check if we need to restart the key 
+            key_in =0 
 
     return ''.join(translated)
 
