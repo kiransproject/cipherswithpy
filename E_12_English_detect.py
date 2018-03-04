@@ -28,9 +28,10 @@ def isEnglish(messa):
             return True
         else:
             return False
+            
     except:
-        print("An error occured parsing the word")
-        return False
+        pass
+    return False
 
 def lookup(posswords):
     match =0
