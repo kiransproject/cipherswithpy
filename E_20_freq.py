@@ -24,7 +24,7 @@ def getFreqOrder(mess):
      # second, make a dictionary of each frequency count to each letter(s) with that frequency
     freqtochar = {}
     for i in range(length):
-        i=ch(i)
+        i=chr(i)
         if lettertofreq[i] not in freqtochar: # look for frequencies not present
             freqtochar[lettertofreq[i]] = [i] # add if not present, else append
         else:
@@ -32,7 +32,7 @@ def getFreqOrder(mess):
 
     #reverse ETAOIN order, for each list of letters (per frequency)
     for freq in freqtochar:
-        freqtochar[freq].sort(key=ETAION.find, reverse=True)
+        freqtochar[freq].sort(key=ETAOIN.find, reverse=True)
         freqtochar[freq] = ''.join(freqtochar[freq]) # convert to string
     
     # sort them in order of frequency

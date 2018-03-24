@@ -1,4 +1,4 @@
-import E_19_vigenerecipher, operator, collections, pdb
+import E_19_vigenerecipher, operator, collections, pdb, E_20_freq, E_12_English_detect
 
 maxkeylen = 16
 nummostfreqletters = 4
@@ -106,13 +106,44 @@ def attempthackwithkeylength(message, keylen):
     
     allfreqscores = []
     for nth in range(1, keylen+1):
-        nthLetter = getnthsubkeyletters(nth, keylen, message)A
+        nthLetter = getnthsubkeyletters(nth, keylen, message)
 
         freqScores = []
-        for possiblkey in range ASCIILEN:
+        for possiblkey in range (ASCIILEN):
             pk = chr(possiblkey) # convert to ascii character
             decryptedtext = E_19_vigenerecipher.decrypt_mes(message, pk)
-            
+            freqScores.append((pk, E_20_freq.englishFreqMatch(decryptedtext))) # append a tuple containing the key and the score relating to the english frequency match
+
+        sorted_freqscores = sorted(freqScores.items(), key=operator.itemgetter(1), reverse=True) #sort by english freq matcher score
+        
+        allfreqscores.append(sorted_freqscores[:nummostfreqletters])
+    
+    if (PRINT):
+        for i in range(len(allfreqscores)):
+            print "possible letters for letter %s of the key: " %(i+1) # add one , so we dont start at 0
+            for freqscore in allfreqscores[i]: # the above is cycling through letter posistion, we are now cycling through the possible mappings
+                print("%s " %freqscore[0])
+            print"\n"
+
+    #try every combination of the most likely letters for each posistion
+    for indexes in itertools.product(range(nummostfreqletters), repeat=keylen):# produces all possible every possible combination of items in a list or list-like value, such as a string or tuple, i.e. if the range is 8 and repeat =5, it creates all possible 5 digit combinations using 0 and 8 i,e 0,0,0,0,0 to 7,7,7,7,7
+        posskey = ""
+        for i in range (keylen):
+            posskey += allfreqscores[i][indexes[i]][0] # cycle through all possible keys
+
+        if (PRINT):
+            print"attempting with key: %s" %posskey
+
+        decrypttext =E_19_vigenerecipher.decrypt_mes(message, posskey)
+
+        if (E_12_English_detect.isEnglish(message)):
+            print "english detected using %s as a key, %s" %(posskey,decypttext[:500])
+            response = raw_input("enter D if correct or enter to continue:")
+            if (respnse.upper()[0] == 'd'):
+                return decrypttext
+
+    return None
+
 
 
 def hackVig(mes):
@@ -127,7 +158,19 @@ def hackVig(mes):
         hackedmessage = attempthackwithkeylength(mes, keylength)
         if hackedmessage != None:
             break
-        pdb.set_trace()
+        #pdb.set_trace()
+
+    if hackedmessage == None:
+        print "unable to hack message with likely key lengths, brute force key length"
+
+        for keylen in range(1,maxkeylen+1):
+            if keylen not in allkeylenghts:# dont recheck kasiski checked lengths
+                print"attempting hack with key length %s (%s possible keys) " %(keylen, nummostfreqletters**keylen)
+                hackedmessage = attempthackwithkeylength(mes, keylen)
+                if hackmessage != None:
+                    break
+
+    return hackedmessage
 
 if __name__ == '__main__':
     main()
