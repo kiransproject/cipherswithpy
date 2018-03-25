@@ -2,6 +2,8 @@ import E_9A_decrypt_transposition_cipher
 
 #implementation of the vigenere cipher 
 
+length = 128
+
 def main():
     message = E_9A_decrypt_transposition_cipher.fetchmessage()
     key = get_word_key()
@@ -32,8 +34,8 @@ def translateMessage(message, key, mode):
         elif ( mode == 'D'):
             new_sym = h-ord(key[key_in])
     
-        if ((new_sym < 0) or (new_sym > 255)):
-            new_sym %= 255 # takes care of the wrap around cases where the number is outside of the ascii value range
+        if ((new_sym < 0) or (new_sym > length)):
+            new_sym %= length # takes care of the wrap around cases where the number is outside of the ascii value range
 
         translated.append(chr(new_sym))
         
