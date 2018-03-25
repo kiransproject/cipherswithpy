@@ -1,8 +1,9 @@
 #import getCanditatemap() from E_18_hacksub
-import operator
+import operator, pdb, collections
 
-ETAOIN = """ etaoinsrhldcumgyfpwb.,vk0-'x)(1j2:q"/5!?z346879%[]*=+|_;\>$#^&@<~{}`""" #order taken from https://mdickens.me/typing/theory-of-letter-frequency.html, with space added at the start
+#ETAOIN = """ etaoinsrhldcumgyfpwb.,vk0-'x)(1j2:q"/5!?z346879%[]*=+|_;\>$#^&@<~{}`""" #order taken from https://mdickens.me/typing/theory-of-letter-frequency.html, with space added at the start, 69 characters overall
 length = 128
+ETAOIN ="ETAOINSHRDLCUMWFGYPBVKJXQZ"
 
 def getCanditatemap():
         return (dict.fromkeys((chr(i) for i in range(length)),0)) # https://stackoverflow.com/questions/2241891/how-to-initialize-a-dict-with-keys-from-a-list-and-empty-value-in-python/2241904
@@ -13,7 +14,7 @@ def getLettercount(mess):
     for char in mess:
         if char in charcount:
             charcount[char] +=1
-
+    
     return charcount
 
 def getFreqOrder(mess):
@@ -36,10 +37,13 @@ def getFreqOrder(mess):
         freqtochar[freq] = ''.join(freqtochar[freq]) # convert to string
     
     # sort them in order of frequency
-    freqpairs = sorted(freqtochar.items(), key=operator.itemgetter(0), reverse=True)
+    #freqpairs = sorted(freqtochar.items(), key=operator.itemgetter(0), reverse=True)
+    freqpairs = collections.OrderedDict(sorted(freqtochar.items(), reverse=True))
     
     # extractst the values and joins them together
     freqorder = []
+    #print freqtochar
+    #pdb.set_trace()    
     values = freqpairs.values() # grabs the values only
     for freqpair in values:
         freqorder.append(freqpair)
@@ -49,9 +53,9 @@ def getFreqOrder(mess):
 def englishFreqMatch(message):
     
     matchscore =0
-    freqOrder = getFreqOrder(message.lower()) # convert to lower case as we are just looking for frequency match score, so case of the letter should not matter
-    for commletter in (ETAION[:7] or ETAION[-7]):
-        if commletter in freqOrder[:7]:
+    freqOrder = getFreqOrder(message.upper()) # convert to upper case as we are just looking for frequency match score, so case of the letter should not matter
+    for commletter in (ETAOIN[:6] or ETAOIN[-6]):
+        if commletter in freqOrder[:6]:
             matchscore +=1
 
-    return matscore
+    return matchscore

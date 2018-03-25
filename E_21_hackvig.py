@@ -1,16 +1,15 @@
-import E_19_vigenerecipher, operator, collections, pdb, E_20_freq, E_12_English_detect
+import E_19_vigenerecipher, operator, collections, pdb, E_20_freq, E_12_English_detect,itertools
 
-maxkeylen = 16
+maxkeylen = 7
 nummostfreqletters = 4
 PRINT = True
 ASCIILEN = 128
 
 def main():
     
-    key = "this"
+    key = "thiskey"
 
-    ciphertext = E_19_vigenerecipher.encrypt_mes("hi its me Kiran         ", key)
-    
+    ciphertext = E_19_vigenerecipher.encrypt_mes("hello one two three four five six seven eight nine ten, test west vest chicken soup this is my grocery list", key)
     hackedmessage = hackVig(ciphertext)
 
     if hackedmessag != None:
@@ -66,7 +65,10 @@ def getMCF(Factors):
         for factor in factorList:
             if factor not in factorCounts and factor <= maxkeylen:
                 factorCounts[factor] =0
+            elif factor > maxkeylen:
+                continue
             factorCounts[factor] +=1
+
     
     # to sort the factors https://stackoverflow.com/questions/613183/how-do-i-sort-a-dictionary-by-value
     sorted_factorCounts = sorted(factorCounts.items(), key=operator.itemgetter(0), reverse=True)
@@ -113,10 +115,12 @@ def attempthackwithkeylength(message, keylen):
             pk = chr(possiblkey) # convert to ascii character
             decryptedtext = E_19_vigenerecipher.decrypt_mes(message, pk)
             freqScores.append((pk, E_20_freq.englishFreqMatch(decryptedtext))) # append a tuple containing the key and the score relating to the english frequency match
-
-        sorted_freqscores = sorted(freqScores.items(), key=operator.itemgetter(1), reverse=True) #sort by english freq matcher score
         
-        allfreqscores.append(sorted_freqscores[:nummostfreqletters])
+        #print freqScores
+        #sorted_freqscores = sorted(freqScores.items(), key=operator.itemgetter(1), reverse=True) #sort by english freq matcher score
+        freqScores.sort(key=operator.itemgetter(1), reverse=True)
+        
+        allfreqscores.append(freqScores[:nummostfreqletters])
     
     if (PRINT):
         for i in range(len(allfreqscores)):
@@ -124,6 +128,7 @@ def attempthackwithkeylength(message, keylen):
             for freqscore in allfreqscores[i]: # the above is cycling through letter posistion, we are now cycling through the possible mappings
                 print("%s " %freqscore[0])
             print"\n"
+    pdb.set_trace()
 
     #try every combination of the most likely letters for each posistion
     for indexes in itertools.product(range(nummostfreqletters), repeat=keylen):# produces all possible every possible combination of items in a list or list-like value, such as a string or tuple, i.e. if the range is 8 and repeat =5, it creates all possible 5 digit combinations using 0 and 8 i,e 0,0,0,0,0 to 7,7,7,7,7
@@ -147,6 +152,8 @@ def attempthackwithkeylength(message, keylen):
 
 
 def hackVig(mes):
+
+    hackedmess = None
     
     allkeylengths= kasiskiFunc(mes) #a function that determines the likely key lengths
     if (PRINT):
@@ -155,22 +162,23 @@ def hackVig(mes):
     for keylength in allkeylengths:
         if (PRINT):
             print "Attempting hack with key length %s (%s possible keys)..." % (keylength,nummostfreqletters**keylength)   # ** represents to the power of
-        hackedmessage = attempthackwithkeylength(mes, keylength)
-        if hackedmessage != None:
+        hackedmess = attempthackwithkeylength(mes, keylength)
+        if hackedmess != None:
             break
         #pdb.set_trace()
 
-    if hackedmessage == None:
+    if hackedmess == None:
         print "unable to hack message with likely key lengths, brute force key length"
+        pdb.set_trace()
 
         for keylen in range(1,maxkeylen+1):
-            if keylen not in allkeylenghts:# dont recheck kasiski checked lengths
+            if keylen not in allkeylengths:# dont recheck kasiski checked lengths
                 print"attempting hack with key length %s (%s possible keys) " %(keylen, nummostfreqletters**keylen)
-                hackedmessage = attempthackwithkeylength(mes, keylen)
-                if hackmessage != None:
+                hackedmess = attempthackwithkeylength(mes, keylen)
+                if hackmess != None:
                     break
 
-    return hackedmessage
+    return hackedmess
 
 if __name__ == '__main__':
     main()
