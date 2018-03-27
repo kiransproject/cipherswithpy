@@ -1,9 +1,9 @@
 #import getCanditatemap() from E_18_hacksub
 import operator, pdb, collections
 
-#ETAOIN = """ etaoinsrhldcumgyfpwb.,vk0-'x)(1j2:q"/5!?z346879%[]*=+|_;\>$#^&@<~{}`""" #order taken from https://mdickens.me/typing/theory-of-letter-frequency.html, with space added at the start, 69 characters overall
+ETAOIN = """ etaoinsrhldcumgyfpwb.,vk0-'x)(1j2:q"/5!?z346879%[]*=+|_;\>$#^&@<~{}`""" #order taken from https://mdickens.me/typing/theory-of-letter-frequency.html, with space added at the start, 69 characters overall
 length = 128
-ETAOIN ="ETAOINSHRDLCUMWFGYPBVKJXQZ"
+#ETAOIN ="ETAOINSHRDLCUMWFGYPBVKJXQZ"
 
 def getCanditatemap():
         return (dict.fromkeys((chr(i) for i in range(length)),0)) # https://stackoverflow.com/questions/2241891/how-to-initialize-a-dict-with-keys-from-a-list-and-empty-value-in-python/2241904
@@ -54,8 +54,7 @@ def englishFreqMatch(message):
     
     matchscore =0
     freqOrder = getFreqOrder(message.upper()) # convert to upper case as we are just looking for frequency match score, so case of the letter should not matter
-    for commletter in (ETAOIN[:6] or ETAOIN[-6]):
-        if commletter in freqOrder[:6]:
+    for commletter in (ETAOIN[:15] or ETAOIN[-15:]):
+        if commletter in (freqOrder[:15] or freqOrder[-15:]):
             matchscore +=1
-
     return matchscore

@@ -7,13 +7,13 @@ ASCIILEN = 128
 
 def main():
     
-    key = "thiskey"
+    key = "this1"
 
-    ciphertext = E_19_vigenerecipher.encrypt_mes("hello one two three four five six seven eight nine ten, test west vest chicken soup this is my grocery list", key)
+    ciphertext = E_19_vigenerecipher.encrypt_mes("hello one two three four five six seven eight nine ten, test west vest chicken soup this is my grocery list bracket ) moose houmous these are english words that should be able to be deciphered", key)
     hackedmessage = hackVig(ciphertext)
 
-    if hackedmessag != None:
-        print hackedmessage
+    if hackedmessage != None:
+        print "The Deciphered message is as follows: " + hackedmessage
     else:
         print "Failed to hack encyrption"
 
@@ -113,14 +113,17 @@ def attempthackwithkeylength(message, keylen):
         freqScores = []
         for possiblkey in range (ASCIILEN):
             pk = chr(possiblkey) # convert to ascii character
-            decryptedtext = E_19_vigenerecipher.decrypt_mes(message, pk)
+            decryptedtext = E_19_vigenerecipher.decrypt_mes(nthLetter, pk)
             freqScores.append((pk, E_20_freq.englishFreqMatch(decryptedtext))) # append a tuple containing the key and the score relating to the english frequency match
         
         #print freqScores
         #sorted_freqscores = sorted(freqScores.items(), key=operator.itemgetter(1), reverse=True) #sort by english freq matcher score
         freqScores.sort(key=operator.itemgetter(1), reverse=True)
         
+
         allfreqscores.append(freqScores[:nummostfreqletters])
+    print freqScores
+    pdb.set_trace()
     
     if (PRINT):
         for i in range(len(allfreqscores)):
@@ -139,12 +142,12 @@ def attempthackwithkeylength(message, keylen):
         if (PRINT):
             print"attempting with key: %s" %posskey
 
-        decrypttext =E_19_vigenerecipher.decrypt_mes(message, posskey)
+        decrypttext = E_19_vigenerecipher.decrypt_mes(message, posskey)
 
-        if (E_12_English_detect.isEnglish(message)):
-            print "english detected using %s as a key, %s" %(posskey,decypttext[:500])
-            response = raw_input("enter D if correct or enter to continue:")
-            if (respnse.upper()[0] == 'd'):
+        if (E_12_English_detect.isEnglish(decrypttext)):
+            print "english detected using %s as a key, %s" %(posskey,decrypttext[:500])
+            response = raw_input("enter D if correct or enter to continue: ")
+            if (response.upper()[0] == 'D'):
                 return decrypttext
 
     return None
@@ -175,7 +178,7 @@ def hackVig(mes):
             if keylen not in allkeylengths:# dont recheck kasiski checked lengths
                 print"attempting hack with key length %s (%s possible keys) " %(keylen, nummostfreqletters**keylen)
                 hackedmess = attempthackwithkeylength(mes, keylen)
-                if hackmess != None:
+                if hackedmess != None:
                     break
 
     return hackedmess
