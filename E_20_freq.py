@@ -1,12 +1,12 @@
 #import getCanditatemap() from E_18_hacksub
-import operator, pdb, collections
+import operator, pdb, collections, string
 
 ETAOIN = """ etaoinsrhldcumgyfpwb.,vk0-'x)(1j2:q"/5!?z346879%[]*=+|_;\>$#^&@<~{}`""" #order taken from https://mdickens.me/typing/theory-of-letter-frequency.html, with space added at the start, 69 characters overall
 length = 128
 #ETAOIN ="ETAOINSHRDLCUMWFGYPBVKJXQZ"
 
 def getCanditatemap():
-        return (dict.fromkeys((chr(i) for i in range(length)),0)) # https://stackoverflow.com/questions/2241891/how-to-initialize-a-dict-with-keys-from-a-list-and-empty-value-in-python/2241904
+        return (dict.fromkeys((chr(i) for i in range (length)),0)) # https://stackoverflow.com/questions/2241891/how-to-initialize-a-dict-with-keys-from-a-list-and-empty-value-in-python/2241904
 
 def getLettercount(mess):
    
@@ -21,7 +21,7 @@ def getFreqOrder(mess):
 
     #get a dictionary of each letter and its frequency count
     lettertofreq = getLettercount(mess)
-    
+
      # second, make a dictionary of each frequency count to each letter(s) with that frequency
     freqtochar = {}
     for i in range(length):
@@ -43,18 +43,23 @@ def getFreqOrder(mess):
     # extractst the values and joins them together
     freqorder = []
     #print freqtochar
-    #pdb.set_trace()    
     values = freqpairs.values() # grabs the values only
     for freqpair in values:
+        #print freqpair
+        #pdb.set_trace()    
         freqorder.append(freqpair)
 
     return ''.join(freqorder)
 
 def englishFreqMatch(message):
     
+    #print message
     matchscore =0
-    freqOrder = getFreqOrder(message.upper()) # convert to upper case as we are just looking for frequency match score, so case of the letter should not matter
-    for commletter in (ETAOIN[:15] or ETAOIN[-15:]):
-        if commletter in (freqOrder[:15] or freqOrder[-15:]):
+    freqOrder = getFreqOrder(message.lower()) # convert to lower case as we are just looking for frequency match score, so case of the letter should not matter
+    #print freqOrder
+    #pdb.set_trace()
+
+    for commletter in (ETAOIN[:16] or ETAOIN[-16:]):
+        if commletter in (freqOrder[:16] or freqOrder[-16:]):
             matchscore +=1
     return matchscore

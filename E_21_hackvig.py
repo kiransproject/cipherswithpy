@@ -1,13 +1,13 @@
 import E_19_vigenerecipher, operator, collections, pdb, E_20_freq, E_12_English_detect,itertools
 
 maxkeylen = 7
-nummostfreqletters = 4
+nummostfreqletters = 10
 PRINT = True
 ASCIILEN = 128
 
 def main():
     
-    key = "this1"
+    key = "this456"
 
     ciphertext = E_19_vigenerecipher.encrypt_mes("hello one two three four five six seven eight nine ten, test west vest chicken soup this is my grocery list bracket ) moose houmous these are english words that should be able to be deciphered", key)
     hackedmessage = hackVig(ciphertext)
@@ -99,7 +99,7 @@ def kasiskiFunc(message):
 def getnthsubkeyletters(num, keylength, message): #seperate the cipher text into seperate streams, with the number of streams based on the keylength
     
     chars = []
-    for i in xrange (0,len(message),keylength): # use xrange to define step size https://stackoverflow.com/questions/2990121/how-do-i-loop-through-a-list-by-twos
+    for i in xrange (num,len(message),keylength): # use xrange to define step size https://stackoverflow.com/questions/2990121/how-do-i-loop-through-a-list-by-twos
         chars.append(message[i])
 
     return ''.join(chars)
@@ -107,23 +107,27 @@ def getnthsubkeyletters(num, keylength, message): #seperate the cipher text into
 def attempthackwithkeylength(message, keylen):
     
     allfreqscores = []
-    for nth in range(1, keylen+1):
+    for nth in range(0, keylen):
         nthLetter = getnthsubkeyletters(nth, keylen, message)
+        #print nth
 
         freqScores = []
-        for possiblkey in range (ASCIILEN):
+        for possiblkey in range (32, ASCIILEN):
             pk = chr(possiblkey) # convert to ascii character
             decryptedtext = E_19_vigenerecipher.decrypt_mes(nthLetter, pk)
             freqScores.append((pk, E_20_freq.englishFreqMatch(decryptedtext))) # append a tuple containing the key and the score relating to the english frequency match
-        
-        #print freqScores
         #sorted_freqscores = sorted(freqScores.items(), key=operator.itemgetter(1), reverse=True) #sort by english freq matcher score
         freqScores.sort(key=operator.itemgetter(1), reverse=True)
         
+        #print freqScores
+        #pdb.set_trace()
 
         allfreqscores.append(freqScores[:nummostfreqletters])
-    print freqScores
-    pdb.set_trace()
+        #print allfreqscores
+        
+    #print freqScores
+    print allfreqscores
+    #pdb.set_trace()
     
     if (PRINT):
         for i in range(len(allfreqscores)):
