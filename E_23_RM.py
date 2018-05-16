@@ -19,7 +19,7 @@ def rabmiller(num):
                     return False # return False if you reach the number of times you haved halved, meaning that you cant create num anymore
                 else: # try the next iteration
                     i +=1
-                    v=(v**2)%num 
+                    v=(v**2)%num # to the power two as we then move up one more in the sequence, same as a^(2s)
     return True # return true if not found to be false with 5 different random numbers
 
 def isprime(num):
