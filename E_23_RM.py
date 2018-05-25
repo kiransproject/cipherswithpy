@@ -44,7 +44,7 @@ def isprime(num):
 
 def generateLargePrime(keysize=1024):
 
-    if isprime(random.randrange(2**(keysize-1),2**(keysize))):
-        return num
-    else:
-        return (generateLargePrime())
+    while True:
+        num = (random.randrange(2**(keysize-1),2**(keysize)))
+        if isprime(num):
+            return num
